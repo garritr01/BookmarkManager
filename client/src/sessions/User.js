@@ -27,8 +27,8 @@ export const Logout = async () => {
 }
 
 export const EmailLogin = ({ setCreatingUser }) => {
-	const [email, setEmail] = useState('garritr01@gmail.com');
-	const [pw, setPw] = useState('GarritLouis');
+	const [email, setEmail] = useState('');
+	const [pw, setPw] = useState('');
 	const [error, setError] = useState(null);
 
 	const signIn = async () => {
