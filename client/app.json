@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Bookmark Manager",
+    "slug": "bookmarkmanager",
+    "owner": "reynolga",
+    "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "bundleIdentifier": "bookmarkmanager06132025",
+      "googleServicesFile": "./client.plist",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.bookmarkmanager06132025"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "bookmarkmanager",
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b194c384-85e4-4f67-92d1-898d32548dd1"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b194c384-85e4-4f67-92d1-898d32548dd1"
+    }
+  }
+}
