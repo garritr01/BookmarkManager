@@ -4,7 +4,7 @@ import { Feather } from 'react-native-vector-icons';
 import { styles, iconSize } from '../styles';
 import { useSave } from '../requests/General';
 
-export const EditBookmarks = ({ navigation, route, selected, setSelected, setBookmarks, setTemps }) => {
+export const EditBookmarks = ({ navigation, route, selected, setSelected, setBookmarks, setFetchTempFlag, setTemps }) => {
 	const [bookmark, setBookmark] = useState({ ...selected });
 	const save = useSave();
 
@@ -17,7 +17,7 @@ export const EditBookmarks = ({ navigation, route, selected, setSelected, setBoo
 			const { temp, _id, ...rest } = bookmark;
 			const toSave = (!temp && _id) ? { _id, ...rest } : rest // save without _id if new or from temp
 			const updated = await save('bookmarks', 'POST', toSave);
-			console.log("Successful save: ", updated);
+			console.log("Successful bookmark save");
 			setSelected({
 				url: '',
 				path: '',
@@ -30,7 +30,8 @@ export const EditBookmarks = ({ navigation, route, selected, setSelected, setBoo
 			// Delete temp on successful save
 			if (temp) {
 				const resp = await save('tempBookmarks', 'DELETE', bookmark);
-				updateTemps(resp.deleted);
+				console.log("Successful temp deletion after bookmark save.")
+				setFetchTempFlag(prev => !prev);
 			}
 		} catch (err) {
 			console.error("Save failed... ", err);
@@ -40,14 +41,14 @@ export const EditBookmarks = ({ navigation, route, selected, setSelected, setBoo
 	const saveTemp = async () => {
 		try {
 			const updated = await save('tempBookmarks', 'POST', bookmark);
-			console.log("Successful temp save: ", updated);
+			console.log("Successful temp save.");
 			setSelected({
 				url: '',
 				path: '',
 				tags: [],
 				notes: '',
 			});
-			updateTemps(updated);
+			setFetchTempFlag(prev => !prev);
 			navigation.navigate("List");
 		} catch (err) {
 			console.error("Temp save failed... ", err);
@@ -60,16 +61,6 @@ export const EditBookmarks = ({ navigation, route, selected, setSelected, setBoo
 				? prev.map(b => b._id === updated._id ? updated : b)
 				: [...prev, updated]
 		);
-	}
-
-	// List doesn't update if I modify in-place
-	const updateTemps = (updated) => {
-		setTemps(prev => {
-			const newTemps = prev.some(b => b._id === updated._id)
-				? prev.map(b => b._id === updated._id ? updated : b)
-				: [...prev, updated]
-			return newTemps;
-		});
 	}
 
 	useEffect(() => {

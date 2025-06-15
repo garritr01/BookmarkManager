@@ -50,6 +50,7 @@ const RootNav = () => {
 	}, [user, fetchBookmarks]);
 
 	const [tempBookmarks, setTempBookmarks] = useState([]);
+	const [fetchTempFlag, setFetchTempFlag] = useState(false);
 	const fetchTempBookmarks = useFetchTempBookmarks();
 	useEffect(() => {
 		if (!user) {
@@ -59,7 +60,10 @@ const RootNav = () => {
 		fetchTempBookmarks()
 			.then(setTempBookmarks)
 			.catch(() => setTempBookmarks([]));
-	}, [user, fetchTempBookmarks]);
+	}, [user, fetchTempFlag, fetchTempBookmarks]);
+
+	useEffect(() => console.log('temp', tempBookmarks), [tempBookmarks]);
+	useEffect(() => console.log('bkmks', bookmarks), [bookmarks]);
 
 	return (
 		<>
@@ -95,7 +99,8 @@ const RootNav = () => {
 											{...params} 
 											selected={selected} 
 											setSelected={setSelected} 
-											setTemps={setTempBookmarks} 
+											setTemps={setTempBookmarks}
+											setFetchTempFlag={setFetchTempFlag}
 											setBookmarks={setBookmarks} 
 										/>
 									}

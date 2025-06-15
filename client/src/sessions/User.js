@@ -27,8 +27,8 @@ export const Logout = async () => {
 }
 
 export const EmailLogin = ({ setCreatingUser }) => {
-	const [email, setEmail] = useState('');
-	const [pw, setPw] = useState('');
+	const [email, setEmail] = useState('garritr01@gmail.com');
+	const [pw, setPw] = useState('GarritLouis');
 	const [error, setError] = useState(null);
 
 	const signIn = async () => {
@@ -73,11 +73,10 @@ export const EmailLogin = ({ setCreatingUser }) => {
 }
 
 export const CreateUser = ({ setCreatingUser }) => {
-	const [email, setEmail] = useState('garritr01@gmail.com');
-	const [password, setPassword] = useState('GarritLouis01');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [confirm, setConfirm] = useState('');
 	const [error, setError] = useState(null);
-	const [loading, setLoading] = useState(false);
 
 	const handleCreate = async () => {
 		if (!email || !password) {
@@ -90,7 +89,6 @@ export const CreateUser = ({ setCreatingUser }) => {
 		}
 
 		try {
-			setLoading(true);
 			setError(null);
 
 			const { user } = await createUserWithEmailAndPassword(
@@ -105,7 +103,6 @@ export const CreateUser = ({ setCreatingUser }) => {
 		} catch (e) {
 			setError(e.message);
 		} finally {
-			setLoading(false);
 			setCreatingUser(false);
 		}
 	};

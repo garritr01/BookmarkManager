@@ -17,7 +17,6 @@ export const useFetchWithAuth = () => {
 			if (!user) throw new Error("Not authenticated"); // frontend auth check
 			const token = await user.getIdToken();
 			const url = `${BACKEND_URL}/${path}${query}`;
-			console.log(url);
 
 			const resp = fetch(url, {
 				...options,
@@ -32,7 +31,7 @@ export const useFetchWithAuth = () => {
 				console.error(`Call to ${url} failed:`, e);
 			}
 
-			return resp
+			return resp;
 		},
 		[user]
 	);
@@ -50,8 +49,6 @@ export const useSave = () => {
 			method,
 			body: JSON.stringify(payload),
 		});
-
-		console.log(resp);
 
 		if (!resp.ok) {
 			const { error: msg } = await resp.json().catch(() => ({}));

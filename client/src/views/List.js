@@ -47,7 +47,7 @@ export const ListBookmarks = ({ navigation, route, bookmarks, setBookmarks, temp
 		const url = item.temp ? 'tempBookmarks' : '_id' in item ? 'bookmarks' : 'bookmarks/dir'
 		try {
 			const resp = await save(url, 'DELETE', item);
-			console.log("Successful directory deletion: ", resp);
+			console.log("Successful directory deletion.");
 			if (item.temp) { updateTemps(resp.deleted) }
 			else { updateBookmarks(resp.deleted) }
 		} catch (err) {
@@ -99,12 +99,13 @@ export const ListBookmarks = ({ navigation, route, bookmarks, setBookmarks, temp
 
 	}, [bookmarks, open]);
 
-	const tempsMemo = useMemo(() => temps, [temps, open]); 
-
-	const sections = [
-		{ title: 'Awaiting Approval', data: tempsMemo.map(t => ({ ...t, temp: true }))},
-		{ title: 'Bookmarks', data: filteredBookmarks.map(p => ({ ...p, temp: false }))},
-	].filter(s => s.data.length > 0);
+	const sections = useMemo(() => {
+		const cleanTemps = temps.filter(t => t && typeof t.path === 'string');
+		return [
+			{ title: 'Awaiting Approval', data: cleanTemps.map(t => ({ ...t, temp: true }))},
+			{ title: 'Bookmarks', data: filteredBookmarks.map(p => ({ ...p, temp: false }))},
+		].filter(s => s.data.length > 0);
+	},[temps, filteredBookmarks, open]);
 
 	// Nav header
 	useEffect(() => {
@@ -131,7 +132,11 @@ export const ListBookmarks = ({ navigation, route, bookmarks, setBookmarks, temp
 					renderSectionHeader={({ section }) => (
 						<Text style={styles.sectionHeader}>{section.title}</Text>
 					)}
-					keyExtractor={(item) => '_id' in item ? item._id : item.path}
+					keyExtractor={(item, idx) => {
+						if (item && item._id) return item._id;
+						if (item && item.path) return `dir-${item.path}`;
+						return `stub-${idx}`;
+					}}
 					renderItem={({ item }) => 
 						<RenderBookmark
 							item={item}
@@ -151,6 +156,7 @@ export const ListBookmarks = ({ navigation, route, bookmarks, setBookmarks, temp
 }
 
 const RenderBookmark = ({ item, open, deleting, setDeleting, handleDirectoryClick, handleBookmarkEditClick, handleRedirect, deleteBookmarks }) => {
+
 	return (
 		<View style={styles.flexRow}>
 			{item.temp ?
